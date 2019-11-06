@@ -1,0 +1,66 @@
+;Eric Tran
+;SALARY PROGRAM
+INCLUDELIB C:\Irvine\irvine32.lib
+INCLUDE C:\Irvine\Irvine32.inc
+
+.data
+str1 BYTE "Please enter your ID: ",0
+invalid BYTE "INVALID ID, please try again.",0
+salary DWORD 54,123,41,25,6,12,8,90,1,3928
+employeeID DWORD 1,2,3,4,5,6,7,8,9,1040
+counter word 0
+locks BYTE "Too many attempts. You are locked out.",0
+
+.code
+main proc
+mov ecx, 3
+mov edx, OFFSET str1
+call writestring
+l1:
+call readdec
+call crlf
+push ecx
+mov ecx, LENGTHOF employeeID
+mov esi, OFFSET employeeID
+l2:
+cmp  DWORD ptr[esi], eax
+je proce
+inc counter
+add esi, TYPE employeeID
+loop l2
+jne skip
+
+
+proce:
+mov cx, counter
+mov eax, DWORD ptr [salary + 4 * ecx]
+call writedec
+call crlf
+mov edx, 0
+mov ebx, 2
+mov ecx, 25
+mov esi, eax
+cwd
+mul ebx
+div ecx
+add eax, esi
+call writedec
+jmp bye
+
+skip:
+mov edx, OFFSET invalid
+call writestring
+call crlf
+pop ecx
+loop l1
+mov edx, OFFSET locks
+call writestring
+
+bye:
+call crlf
+call waitmsg
+invoke ExitProcess,0
+main endp
+end main
+
+
