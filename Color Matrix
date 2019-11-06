@@ -1,0 +1,32 @@
+;Eric Tran
+INCLUDELIB C:\Irvine\irvine32.lib
+INCLUDE C:\Irvine\Irvine32.inc
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:dword
+
+.data
+message byte "This is a string.", 0
+color DWORD 1
+
+.code
+main proc
+mov ecx, 4
+l1:
+     mov eax, color
+     Call SetTextColor
+	 l2:
+		inc color
+		mov eax, color
+		Call SetTextColor
+		mov edx,OFFSET message
+		call WriteString
+		call crlf
+	 loop l2
+     loop l1
+
+invoke ExitProcess,0
+main endp
+end main
+
